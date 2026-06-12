@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Productos{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+                <li class="breadcrumb-item active">Productos</li>
+            </ol>
+        </nav>
+        <h1 class="page-title">
+            <i class="bi bi-grid me-2 text-success"></i>
+            {% if categoria_activa %}{{ categoria_activa.nombre }}{% else %}Todos los Productos{% endif %}
+        </h1>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- Sidebar de categorías -->
+        <div class="col-lg-3">
+            <div class="filter-card">
+                <h6 class="filter-title"><i class="bi bi-funnel me-2"></i>Categorías</h6>
+                <ul class="filter-list">
+                    <li>
+                        <a href="{% url 'productos' %}"
+                           class="filter-link {% if not categoria_activa %}active{% endif %}">
+                            <i class="bi bi-grid-fill me-2"></i>Todos
+                        </a>
+                    </li>
+                    {% for cat in categorias %}
+                    <li>
+                        <a href="{% url 'productos' %}?categoria={{ cat.id }}"
+                           class="filter-link {% if categoria_activa.id == cat.id %}active{% endif %}">
+                            <i class="bi {{ cat.icono }} me-2"></i>{{ cat.nombre }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Grid de productos -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="text-muted mb-0">
+                    <strong class="text-success">{{ productos|length }}</strong> producto(s) encontrado(s)
+                </p>
+            </div>
+
+            <div class="row g-4">
+                {% for producto in productos %}
+                <div class="col-sm-6 col-xl-4">
+                    <div class="product-card">
+                        {% if producto.tiene_oferta %}
+                        <div class="product-badge-oferta">-{{ producto.porcentaje_descuento }}%</div>
+                        {% endif %}
+                        <div class="product-img-wrap">
+                            {% if producto.imagen_url %}
+                            <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="product-img">
+                            {% else %}
+                            <div class="product-img-placeholder">
+                                <i class="bi {{ producto.categoria.icono }}"></i>
+                                <span>{{ producto.categoria.nombre }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="product-body">
+                            <span class="product-category">{{ producto.categoria.nombre }}</span>
+                            <h5 class="product-name">{{ producto.nombre }}</h5>
+                            <p class="product-desc">{{ producto.descripcion|truncatechars:70 }}</p>
+                            <div class="product-footer">
+                                <div class="product-price">
+                                    {% if producto.tiene_oferta %}
+                                    <span class="price-old">${{ producto.precio }}</span>
+                                    <span class="price-new">${{ producto.precio_oferta }}</span>
+                                    {% else %}
+                                    <span class="price-new">${{ producto.precio }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-success btn-sm rounded-pill">
+                                    Ver más <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-box-seam display-1 text-muted opacity-25"></i>
+                    <h4 class="mt-3 text-muted">No hay productos en esta categoría</h4>
+                    <a href="{% url 'productos' %}" class="btn btn-outline-success rounded-pill mt-2">Ver todos los productos</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

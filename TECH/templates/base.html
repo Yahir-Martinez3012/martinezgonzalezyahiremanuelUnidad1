@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}TecnoStore UTC{% endblock %} | TecnoStore UTC</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+
+<!-- ===================================================
+     BARRA DE NAVEGACIÓN PRINCIPAL
+=================================================== -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
+    <div class="container">
+
+        <!-- Logo / Nombre del sitio -->
+        <a class="navbar-brand fw-bold fs-4" href="{% url 'inicio' %}">
+            <i class="bi bi-cpu-fill me-2 text-success-light"></i>
+            <span class="text-white">Tecno</span><span class="brand-accent">Store</span>
+            <small class="text-muted fs-6 ms-1">UTC</small>
+        </a>
+
+        <!-- Botón hamburguesa para móvil -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <!-- Secciones principales -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}"
+                       href="{% url 'inicio' %}">
+                        <i class="bi bi-house me-1"></i>Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'productos' %}active{% endif %}"
+                       href="{% url 'productos' %}">
+                        <i class="bi bi-grid me-1"></i>Productos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'ofertas' %}active{% endif %}"
+                       href="{% url 'ofertas' %}">
+                        <i class="bi bi-tag me-1"></i>Ofertas
+                        <span class="badge bg-danger ms-1">HOT</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Buscador -->
+            <form class="d-flex me-3 search-form" action="{% url 'buscar' %}" method="GET">
+                <div class="input-group">
+                    <input class="form-control form-control-sm search-input"
+                           type="search" name="q" placeholder="Buscar productos..."
+                           value="{{ request.GET.q }}" aria-label="Buscar">
+                    <button class="btn btn-success btn-sm" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Menú de elementos adicionales -->
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <!-- Usuario logueado -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'buzon' %}">
+                            <i class="bi bi-envelope me-1"></i>Buzón
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>
+                            {{ user.first_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-dark-custom">
+                            <li>
+                                <span class="dropdown-item-text text-muted small">
+                                    <i class="bi bi-person me-1"></i>{{ user.username }}
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <!-- Usuario no logueado -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'registro' %}">
+                            <i class="bi bi-person-plus me-1"></i>Registrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-login-nav" href="{% url 'login' %}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Menú "Más" -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-dark-custom">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'chat' %}">
+                                <i class="bi bi-chat-dots me-2 text-success"></i>Chat de Ayuda
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'ayuda' %}">
+                                <i class="bi bi-question-circle me-2 text-info"></i>Ayuda / FAQ
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'contacto' %}">
+                                <i class="bi bi-telephone me-2 text-warning"></i>Contáctanos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'recuperar' %}">
+                                <i class="bi bi-key me-2 text-danger"></i>Recuperar Contraseña
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'mapa_sitio' %}">
+                                <i class="bi bi-map me-2"></i>Mapa del Sitio
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'demo_404' %}">
+                                <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Página de Error 404
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<!-- ===================================================
+     MENSAJES FLASH (notificaciones)
+=================================================== -->
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-4 shadow-sm" role="alert">
+        {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill me-2"></i>
+        {% elif message.tags == 'error' or message.tags == 'danger' %}<i class="bi bi-x-circle-fill me-2"></i>
+        {% elif message.tags == 'warning' %}<i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% else %}<i class="bi bi-info-circle-fill me-2"></i>{% endif %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- ===================================================
+     CONTENIDO PRINCIPAL (cada página lo llena)
+=================================================== -->
+<main class="main-content">
+    {% block contenido %}{% endblock %}
+</main>
+
+<!-- ===================================================
+     PIE DE PÁGINA
+=================================================== -->
+<footer class="footer mt-auto">
+    <div class="container">
+        <div class="row g-4 py-5">
+            <!-- Columna 1: Info -->
+            <div class="col-md-4">
+                <h5 class="text-white fw-bold mb-3">
+                    <i class="bi bi-cpu-fill me-2 text-success"></i>TecnoStore UTC
+                </h5>
+                <p class="text-muted small">
+                    Tu tienda de tecnología universitaria. Productos de calidad para estudiantes y profesionales.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="me-3"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#"><i class="bi bi-whatsapp"></i></a>
+                </div>
+            </div>
+            <!-- Columna 2: Links -->
+            <div class="col-md-4">
+                <h6 class="text-white mb-3 fw-semibold">Navegación</h6>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="{% url 'inicio' %}"><i class="bi bi-chevron-right me-1"></i>Inicio</a></li>
+                    <li><a href="{% url 'productos' %}"><i class="bi bi-chevron-right me-1"></i>Productos</a></li>
+                    <li><a href="{% url 'ofertas' %}"><i class="bi bi-chevron-right me-1"></i>Ofertas</a></li>
+                    <li><a href="{% url 'contacto' %}"><i class="bi bi-chevron-right me-1"></i>Contáctanos</a></li>
+                    <li><a href="{% url 'mapa_sitio' %}"><i class="bi bi-chevron-right me-1"></i>Mapa del Sitio</a></li>
+                </ul>
+            </div>
+            <!-- Columna 3: Contacto -->
+            <div class="col-md-4">
+                <h6 class="text-white mb-3 fw-semibold">Contacto</h6>
+                <ul class="list-unstyled footer-contact">
+                    <li><i class="bi bi-geo-alt me-2 text-success"></i>UTC, Saltillo, Coahuila</li>
+                    <li><i class="bi bi-telephone me-2 text-success"></i>(844) 123-4567</li>
+                    <li><i class="bi bi-envelope me-2 text-success"></i>tecnostore@utc.edu.mx</li>
+                    <li><i class="bi bi-clock me-2 text-success"></i>Lun–Vie: 8:00–18:00</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="border-secondary">
+        <div class="row align-items-center py-3">
+            <div class="col-md-6 text-center text-md-start">
+                <small class="text-muted">
+                    © 2024 TecnoStore UTC · Proyecto Escolar · Desarrollo Web
+                </small>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <small class="text-muted">
+                    Hecho con <i class="bi bi-heart-fill text-danger"></i> por
+                    <strong class="text-success">Martinez González Yahir Emanuel</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JS personalizado -->
+<script src="{% static 'js/validaciones.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

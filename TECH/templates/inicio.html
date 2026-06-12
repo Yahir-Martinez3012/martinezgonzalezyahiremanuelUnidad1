@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-60 py-5">
+            <div class="col-lg-6">
+                <div class="hero-badge mb-3">
+                    <span class="badge-tech">
+                        <i class="bi bi-stars me-1"></i>Nueva temporada 2024
+                    </span>
+                </div>
+                <h1 class="hero-title">
+                    La tecnología que<br>
+                    <span class="text-gradient">necesitas hoy</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Laptops, celulares, accesorios y más. Todo para el estudiante universitario moderno. Precios increíbles, calidad garantizada.
+                </p>
+                <div class="hero-actions d-flex gap-3 flex-wrap">
+                    <a href="{% url 'productos' %}" class="btn btn-success btn-hero">
+                        <i class="bi bi-grid me-2"></i>Ver Productos
+                    </a>
+                    <a href="{% url 'ofertas' %}" class="btn btn-outline-success btn-hero-outline">
+                        <i class="bi bi-tag me-2"></i>Ver Ofertas
+                    </a>
+                </div>
+                <!-- Estadísticas rápidas -->
+                <div class="hero-stats mt-4 d-flex gap-4">
+                    <div class="stat-item">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">Productos</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Marcas</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Soporte</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+                <div class="hero-graphic">
+                    <div class="floating-card card-1">
+                        <i class="bi bi-laptop"></i>
+                        <span>Laptops</span>
+                    </div>
+                    <div class="floating-card card-2">
+                        <i class="bi bi-phone"></i>
+                        <span>Celulares</span>
+                    </div>
+                    <div class="floating-card card-3">
+                        <i class="bi bi-headphones"></i>
+                        <span>Audio</span>
+                    </div>
+                    <div class="hero-circle">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z" fill="var(--bg-main)"/>
+        </svg>
+    </div>
+</section>
+
+<!-- ===== CATEGORÍAS ===== -->
+<section class="section-categories py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-eyebrow">Explora por tipo</span>
+            <h2 class="section-title">Categorías</h2>
+        </div>
+        <div class="row g-3 justify-content-center">
+            {% for cat in categorias %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="{% url 'productos' %}?categoria={{ cat.id }}" class="category-card text-decoration-none">
+                    <div class="cat-icon">
+                        <i class="bi {{ cat.icono }}"></i>
+                    </div>
+                    <span class="cat-name">{{ cat.nombre }}</span>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center text-muted">
+                <i class="bi bi-grid display-4 mb-3 d-block opacity-25"></i>
+                <p>Aún no hay categorías. Agrégalas desde el <a href="/admin/" class="text-success">panel admin</a>.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== PRODUCTOS DESTACADOS ===== -->
+<section class="section-featured py-5">
+    <div class="container">
+        <div class="section-header d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <span class="section-eyebrow">Lo más popular</span>
+                <h2 class="section-title mb-0">Productos Destacados</h2>
+            </div>
+            <a href="{% url 'productos' %}" class="btn btn-outline-success btn-sm rounded-pill">
+                Ver todos <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for producto in productos_destacados %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="product-card">
+                    {% if producto.tiene_oferta %}
+                    <div class="product-badge-oferta">-{{ producto.porcentaje_descuento }}%</div>
+                    {% endif %}
+                    <div class="product-img-wrap">
+                        {% if producto.imagen_url %}
+                        <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="product-img">
+                        {% else %}
+                        <div class="product-img-placeholder">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">{{ producto.categoria.nombre }}</span>
+                        <h5 class="product-name">{{ producto.nombre }}</h5>
+                        <p class="product-desc">{{ producto.descripcion|truncatechars:80 }}</p>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                {% if producto.tiene_oferta %}
+                                <span class="price-old">${{ producto.precio }}</span>
+                                <span class="price-new">${{ producto.precio_oferta }}</span>
+                                {% else %}
+                                <span class="price-new">${{ producto.precio }}</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-success btn-sm rounded-pill">
+                                Ver más <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-box-seam display-1 text-muted opacity-25"></i>
+                <h4 class="mt-3 text-muted">Aún no hay productos destacados</h4>
+                <p class="text-muted">Agrega productos desde el <a href="/admin/" class="text-success">panel de administración</a>.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== BANNER CTA ===== -->
+<section class="section-cta py-5 my-4">
+    <div class="container">
+        <div class="cta-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="text-white fw-bold mb-2">
+                        <i class="bi bi-tag-fill me-2 text-warning"></i>¡No te pierdas nuestras ofertas!
+                    </h3>
+                    <p class="text-white-50 mb-0">Descuentos de hasta 50% en productos seleccionados. ¡Por tiempo limitado!</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="{% url 'ofertas' %}" class="btn btn-warning btn-lg rounded-pill fw-bold">
+                        <i class="bi bi-lightning-fill me-2"></i>Ver Ofertas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CARACTERÍSTICAS ===== -->
+<section class="section-features py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="feature-item text-center">
+                    <div class="feature-icon"><i class="bi bi-truck"></i></div>
+                    <h6>Envío Rápido</h6>
+                    <small class="text-muted">3-5 días hábiles</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-item text-center">
+                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                    <h6>Garantía</h6>
+                    <small class="text-muted">1 año en todos los productos</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-item text-center">
+                    <div class="feature-icon"><i class="bi bi-headset"></i></div>
+                    <h6>Soporte 24/7</h6>
+                    <small class="text-muted">Chat y llamadas</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="feature-item text-center">
+                    <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
+                    <h6>Devoluciones</h6>
+                    <small class="text-muted">30 días sin preguntas</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

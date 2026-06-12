@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Recuperar Contraseña{% endblock %}
+
+{% block contenido %}
+<div class="auth-section">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="auth-icon" style="background: rgba(220,53,69,0.15);">
+                            <i class="bi bi-key-fill text-danger"></i>
+                        </div>
+                        <h2 class="auth-title">Recuperar Contraseña</h2>
+                        <p class="auth-subtitle">Te enviaremos un enlace a tu correo</p>
+                    </div>
+
+                    {% if enviado %}
+                    <div class="text-center py-4">
+                        <div class="success-icon mb-3">
+                            <i class="bi bi-envelope-check-fill text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h5 class="text-white">¡Correo enviado! (simulado)</h5>
+                        <p class="text-muted">En un proyecto real, recibirías un enlace en tu correo para restablecer tu contraseña.</p>
+                        <a href="{% url 'login' %}" class="btn btn-success rounded-pill">Volver al Login</a>
+                    </div>
+                    {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">{{ formulario.email.label }}</label>
+                            {{ formulario.email }}
+                            {% if formulario.email.errors %}
+                            <div class="invalid-feedback d-block">{{ formulario.email.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-pill fw-bold">
+                                <i class="bi bi-send me-2"></i>Enviar enlace de recuperación
+                            </button>
+                        </div>
+                    </form>
+                    <div class="auth-footer">
+                        <a href="{% url 'login' %}" class="text-success">
+                            <i class="bi bi-arrow-left me-1"></i>Volver al login
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

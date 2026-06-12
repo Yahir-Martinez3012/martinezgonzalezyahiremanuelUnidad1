@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Mi Buzón{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title"><i class="bi bi-envelope me-2 text-success"></i>Mi Buzón</h1>
+        <p class="text-muted">Envía y revisa tus mensajes</p>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <!-- Formulario de nuevo mensaje -->
+        <div class="col-lg-5">
+            <div class="form-card">
+                <h5 class="form-card-title">
+                    <i class="bi bi-pencil-square me-2 text-success"></i>Nuevo Mensaje
+                </h5>
+                <form method="POST" id="formBuzon">
+                    {% csrf_token %}
+                    {% for field in formulario %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="invalid-feedback d-block">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success rounded-pill fw-semibold">
+                            <i class="bi bi-send me-2"></i>Enviar Mensaje
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de mensajes -->
+        <div class="col-lg-7">
+            <div class="messages-header mb-3">
+                <h5 class="text-white fw-semibold mb-0">
+                    <i class="bi bi-inbox me-2 text-success"></i>Mis Mensajes
+                    <span class="badge bg-success ms-2">{{ mensajes|length }}</span>
+                </h5>
+            </div>
+            <div class="messages-list">
+                {% for msg in mensajes %}
+                <div class="message-item {% if not msg.leido %}unread{% endif %}">
+                    <div class="message-header">
+                        <strong class="text-white">{{ msg.asunto }}</strong>
+                        <small class="text-muted">{{ msg.fecha_envio|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <p class="message-body">{{ msg.mensaje }}</p>
+                    {% if not msg.leido %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">Nuevo</span>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox display-3 opacity-25 d-block mb-3"></i>
+                    <p>No tienes mensajes aún. ¡Envía el primero!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

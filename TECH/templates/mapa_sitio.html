@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Mapa del Sitio{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title"><i class="bi bi-map me-2 text-success"></i>Mapa del Sitio</h1>
+        <p class="text-muted">Todas las secciones de TecnoStore UTC</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Secciones Principales -->
+        <div class="col-md-4">
+            <div class="sitemap-card">
+                <div class="sitemap-card-header">
+                    <i class="bi bi-diagram-3 me-2"></i>Secciones Principales
+                </div>
+                <ul class="sitemap-list">
+                    {% for item in secciones.principales %}
+                    <li>
+                        <a href="{{ item.url }}">
+                            <i class="bi {{ item.icono }} me-2 text-success"></i>{{ item.nombre }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Secciones Secundarias -->
+        <div class="col-md-4">
+            <div class="sitemap-card">
+                <div class="sitemap-card-header">
+                    <i class="bi bi-diagram-2 me-2"></i>Secciones Secundarias
+                </div>
+                <ul class="sitemap-list">
+                    {% for item in secciones.secundarias %}
+                    <li>
+                        <a href="{{ item.url }}">
+                            <i class="bi {{ item.icono }} me-2 text-info"></i>{{ item.nombre }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Elementos Adicionales -->
+        <div class="col-md-4">
+            <div class="sitemap-card">
+                <div class="sitemap-card-header">
+                    <i class="bi bi-plus-circle me-2"></i>Elementos Adicionales
+                </div>
+                <ul class="sitemap-list">
+                    {% for item in secciones.adicionales %}
+                    <li>
+                        <a href="{{ item.url }}">
+                            <i class="bi {{ item.icono }} me-2 text-warning"></i>{{ item.nombre }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

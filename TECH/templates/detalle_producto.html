@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}{{ producto.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'productos' %}">Productos</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'productos' %}?categoria={{ producto.categoria.id }}">{{ producto.categoria.nombre }}</a></li>
+                <li class="breadcrumb-item active">{{ producto.nombre|truncatechars:30 }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5 align-items-start">
+        <!-- Imagen del producto -->
+        <div class="col-lg-5">
+            <div class="product-detail-img-wrap">
+                {% if producto.tiene_oferta %}
+                <div class="product-badge-oferta-lg">-{{ producto.porcentaje_descuento }}% OFF</div>
+                {% endif %}
+                {% if producto.imagen_url %}
+                <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="img-fluid rounded-4 shadow">
+                {% else %}
+                <div class="product-img-placeholder-lg">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Sin imagen</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Info del producto -->
+        <div class="col-lg-7">
+            <span class="product-category mb-2 d-inline-block">
+                <i class="bi {{ producto.categoria.icono }} me-1"></i>{{ producto.categoria.nombre }}
+            </span>
+            <h1 class="product-detail-title">{{ producto.nombre }}</h1>
+
+            <!-- Precio -->
+            <div class="product-detail-price mb-4">
+                {% if producto.tiene_oferta %}
+                <span class="price-old-lg">${{ producto.precio }}</span>
+                <span class="price-new-lg">${{ producto.precio_oferta }}</span>
+                <span class="badge bg-danger ms-2">Ahorra {{ producto.porcentaje_descuento }}%</span>
+                {% else %}
+                <span class="price-new-lg">${{ producto.precio }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Descripción -->
+            <div class="product-detail-desc mb-4">
+                <h6 class="text-muted mb-2">Descripción</h6>
+                <p>{{ producto.descripcion }}</p>
+            </div>
+
+            <!-- Stock -->
+            <div class="mb-4">
+                {% if producto.stock > 0 %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                    <i class="bi bi-check-circle me-1"></i>En stock ({{ producto.stock }} disponibles)
+                </span>
+                {% else %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2">
+                    <i class="bi bi-x-circle me-1"></i>Sin stock
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="d-flex gap-3 flex-wrap mb-4">
+                <button class="btn btn-success btn-lg rounded-pill px-5">
+                    <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                </button>
+                <a href="{% url 'contacto' %}" class="btn btn-outline-success btn-lg rounded-pill">
+                    <i class="bi bi-question-circle me-2"></i>Preguntar
+                </a>
+            </div>
+
+            <!-- Info adicional -->
+            <div class="product-info-list">
+                <div class="info-item">
+                    <i class="bi bi-truck text-success"></i>
+                    <span>Envío gratis en pedidos mayores a $1,500</span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-shield-check text-success"></i>
+                    <span>Garantía de 1 año incluida</span>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-arrow-repeat text-success"></i>
+                    <span>Devolución gratis en 30 días</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos relacionados -->
+    {% if relacionados %}
+    <section class="mt-5 pt-4 border-top border-secondary">
+        <h4 class="mb-4 text-white">También te podría interesar</h4>
+        <div class="row g-4">
+            {% for rel in relacionados %}
+            <div class="col-sm-6 col-md-3">
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        {% if rel.imagen_url %}
+                        <img src="{{ rel.imagen_url }}" alt="{{ rel.nombre }}" class="product-img">
+                        {% else %}
+                        <div class="product-img-placeholder"><i class="bi {{ produto.categoria.icono|default:'bi-box-seam' }}"></i></div>
+                        {% endif %}
+                    </div>
+                    <div class="product-body">
+                        <h6 class="product-name">{{ rel.nombre }}</h6>
+                        <div class="product-footer">
+                            <span class="price-new">${{ rel.precio_oferta|default:rel.precio }}</span>
+                            <a href="{% url 'detalle_producto' rel.pk %}" class="btn btn-success btn-sm rounded-pill">Ver</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Chat de Ayuda{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title"><i class="bi bi-chat-dots me-2 text-success"></i>Chat de Ayuda</h1>
+        <p class="text-muted">TecnoBot está aquí para ayudarte</p>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="chat-container">
+                <!-- Header del chat -->
+                <div class="chat-header">
+                    <div class="bot-avatar">
+                        <i class="bi bi-robot"></i>
+                    </div>
+                    <div class="bot-info">
+                        <strong>TecnoBot</strong>
+                        <small><span class="status-dot"></span>En línea</small>
+                    </div>
+                </div>
+
+                <!-- Área de mensajes -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Mensaje de bienvenida del bot -->
+                    <div class="chat-msg bot-msg">
+                        <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+                        <div class="msg-bubble">
+                            ¡Hola! Soy TecnoBot 🤖. Puedo ayudarte con preguntas sobre <strong>productos, precios, ofertas, envíos</strong> y más. ¿En qué te ayudo?
+                        </div>
+                    </div>
+                    <!-- Sugerencias rápidas -->
+                    <div class="chat-suggestions">
+                        <button class="suggestion-btn" onclick="enviarSugerencia('¿Qué productos tienen?')">¿Qué productos tienen?</button>
+                        <button class="suggestion-btn" onclick="enviarSugerencia('¿Tienen ofertas?')">¿Tienen ofertas?</button>
+                        <button class="suggestion-btn" onclick="enviarSugerencia('¿Cómo funciona el envío?')">¿Cómo es el envío?</button>
+                    </div>
+
+                    <!-- Historial de mensajes previos -->
+                    {% for msg in historial %}
+                    <div class="chat-msg {% if msg.tipo == 'usuario' %}user-msg{% else %}bot-msg{% endif %}">
+                        {% if msg.tipo == 'bot' %}
+                        <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+                        {% endif %}
+                        <div class="msg-bubble">{{ msg.mensaje }}</div>
+                        {% if msg.tipo == 'usuario' %}
+                        <div class="msg-avatar user-avatar"><i class="bi bi-person-fill"></i></div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Input de mensaje -->
+                <div class="chat-input-area">
+                    <div class="input-group">
+                        <input type="text" id="chatInput" class="form-control chat-input"
+                               placeholder="Escribe tu mensaje..." maxlength="300"
+                               autocomplete="off">
+                        <button class="btn btn-success btn-send" id="btnEnviar">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const btnEnviar = document.getElementById('btnEnviar');
+const csrfToken = '{{ csrf_token }}';
+
+// Hacer scroll al final del chat
+function scrollBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+scrollBottom();
+
+// Agregar mensaje al chat (visual)
+function agregarMensaje(texto, tipo) {
+    const div = document.createElement('div');
+    div.className = `chat-msg ${tipo === 'usuario' ? 'user-msg' : 'bot-msg'} animate-in`;
+
+    if (tipo === 'bot') {
+        div.innerHTML = `<div class="msg-avatar"><i class="bi bi-robot"></i></div><div class="msg-bubble">${texto}</div>`;
+    } else {
+        div.innerHTML = `<div class="msg-bubble">${texto}</div><div class="msg-avatar user-avatar"><i class="bi bi-person-fill"></i></div>`;
+    }
+
+    chatMessages.appendChild(div);
+    scrollBottom();
+}
+
+// Mostrar indicador de "escribiendo..."
+function mostrarEscribiendo() {
+    const div = document.createElement('div');
+    div.className = 'chat-msg bot-msg';
+    div.id = 'typing-indicator';
+    div.innerHTML = `<div class="msg-avatar"><i class="bi bi-robot"></i></div>
+                     <div class="msg-bubble typing-dots"><span></span><span></span><span></span></div>`;
+    chatMessages.appendChild(div);
+    scrollBottom();
+}
+
+function quitarEscribiendo() {
+    const indicator = document.getElementById('typing-indicator');
+    if (indicator) indicator.remove();
+}
+
+// Enviar mensaje
+async function enviarMensaje() {
+    const texto = chatInput.value.trim();
+    if (!texto) return;
+
+    agregarMensaje(texto, 'usuario');
+    chatInput.value = '';
+    btnEnviar.disabled = true;
+    mostrarEscribiendo();
+
+    try {
+        const response = await fetch('/chat/enviar/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ mensaje: texto })
+        });
+        const data = await response.json();
+        setTimeout(() => {
+            quitarEscribiendo();
+            agregarMensaje(data.respuesta, 'bot');
+            btnEnviar.disabled = false;
+        }, 800);
+    } catch (error) {
+        quitarEscribiendo();
+        agregarMensaje('Hubo un error de conexión. Inténtalo de nuevo.', 'bot');
+        btnEnviar.disabled = false;
+    }
+}
+
+// Enviar con botón o Enter
+btnEnviar.addEventListener('click', enviarMensaje);
+chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') enviarMensaje(); });
+
+// Botones de sugerencia
+function enviarSugerencia(texto) {
+    chatInput.value = texto;
+    enviarMensaje();
+}
+</script>
+{% endblock %}

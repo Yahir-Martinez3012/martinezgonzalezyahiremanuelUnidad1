@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Registro{% endblock %}
+
+{% block contenido %}
+<div class="auth-section">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="auth-icon">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </div>
+                        <h2 class="auth-title">Crear cuenta</h2>
+                        <p class="auth-subtitle">Únete a TecnoStore UTC</p>
+                    </div>
+
+                    <form method="POST" id="formRegistro" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+                            <!-- Nombre -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ formulario.first_name.label }}</label>
+                                {{ formulario.first_name }}
+                                {% if formulario.first_name.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <!-- Apellidos -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ formulario.last_name.label }}</label>
+                                {{ formulario.last_name }}
+                                {% if formulario.last_name.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <!-- Usuario -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">{{ formulario.username.label }}</label>
+                                {{ formulario.username }}
+                                {% if formulario.username.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <!-- Email -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">{{ formulario.email.label }}</label>
+                                {{ formulario.email }}
+                                {% if formulario.email.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <!-- Contraseña -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ formulario.password1.label }}</label>
+                                {{ formulario.password1 }}
+                                {% if formulario.password1.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.password1.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ formulario.password2.label }}</label>
+                                {{ formulario.password2 }}
+                                {% if formulario.password2.errors %}
+                                <div class="invalid-feedback d-block">{{ formulario.password2.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <!-- Captcha (verificación humana) -->
+                            <div class="col-12">
+                                <div class="captcha-box">
+                                    <div class="captcha-question">
+                                        <i class="bi bi-shield-check me-2 text-success"></i>
+                                        <strong>Verificación humana:</strong>
+                                    </div>
+                                    <label class="form-label mt-2">{{ formulario.captcha_respuesta.label }}</label>
+                                    {{ formulario.captcha_respuesta }}
+                                    {% if formulario.captcha_respuesta.errors %}
+                                    <div class="invalid-feedback d-block">{{ formulario.captcha_respuesta.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Errores generales -->
+                        {% if formulario.non_field_errors %}
+                        <div class="alert alert-danger mt-3 rounded-3">
+                            {% for error in formulario.non_field_errors %}
+                            <div><i class="bi bi-x-circle me-2"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold" id="btnRegistro">
+                                <i class="bi bi-person-check me-2"></i>Crear mi cuenta
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="auth-footer">
+                        ¿Ya tienes cuenta?
+                        <a href="{% url 'login' %}" class="text-success fw-semibold">Iniciar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Búsqueda{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title"><i class="bi bi-search me-2 text-success"></i>Buscar Productos</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Barra de búsqueda grande -->
+    <div class="search-bar-big mb-5">
+        <form action="{% url 'buscar' %}" method="GET">
+            <div class="input-group input-group-lg">
+                <input type="text" name="q" class="form-control search-input-big"
+                       placeholder="Busca laptops, celulares, accesorios..."
+                       value="{{ query }}" autofocus>
+                <button class="btn btn-success px-4" type="submit">
+                    <i class="bi bi-search me-2"></i>Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Resultados -->
+    {% if query %}
+    <div class="mb-4">
+        <h5 class="text-white">
+            {% if resultados %}
+            <i class="bi bi-check-circle text-success me-2"></i>
+            {{ resultados|length }} resultado(s) para "<span class="text-success">{{ query }}</span>"
+            {% else %}
+            <i class="bi bi-x-circle text-danger me-2"></i>
+            No se encontraron resultados para "<span class="text-danger">{{ query }}</span>"
+            {% endif %}
+        </h5>
+    </div>
+
+    {% if resultados %}
+    <div class="row g-4">
+        {% for producto in resultados %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="product-card">
+                {% if producto.tiene_oferta %}
+                <div class="product-badge-oferta">-{{ producto.porcentaje_descuento }}%</div>
+                {% endif %}
+                <div class="product-img-wrap">
+                    {% if producto.imagen_url %}
+                    <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="product-img">
+                    {% else %}
+                    <div class="product-img-placeholder"><i class="bi {{ produto.categoria.icono|default:'bi-box-seam' }}"></i></div>
+                    {% endif %}
+                </div>
+                <div class="product-body">
+                    <span class="product-category">{{ producto.categoria.nombre }}</span>
+                    <h5 class="product-name">{{ producto.nombre }}</h5>
+                    <div class="product-footer">
+                        <span class="price-new">${{ producto.precio_oferta|default:producto.precio }}</span>
+                        <a href="{% url 'detalle_producto' producto.pk %}" class="btn btn-success btn-sm rounded-pill">Ver más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-search display-1 text-muted opacity-25"></i>
+        <h4 class="mt-3 text-muted">Sin resultados</h4>
+        <p class="text-muted">Intenta con otras palabras como: laptop, celular, audífonos, etc.</p>
+        <a href="{% url 'productos' %}" class="btn btn-outline-success rounded-pill">Ver todos los productos</a>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
