@@ -1,15 +1,15 @@
-# 🚀 TecnoStore UTC — Guía de instalación para Yahir
+# TecnoStore UTC — Guía de instalación para Yahir
 ## Proyecto: MartinezGonzalezYahirEmanuelUnidad1
 
 ---
 
-## 📋 REQUISITOS PREVIOS
+## REQUISITOS PREVIOS
 
 Antes de empezar, necesitas tener instalado en tu computadora:
 
 1. **Python 3.10 o superior**
    - Descárgalo de: https://www.python.org/downloads/
-   - ⚠️ IMPORTANTE: Al instalar, marca la casilla **"Add Python to PATH"**
+   - IMPORTANTE: Al instalar, marca la casilla **"Add Python to PATH"**
 
 2. **Visual Studio Code**
    - Descárgalo de: https://code.visualstudio.com/
@@ -20,7 +20,7 @@ Antes de empezar, necesitas tener instalado en tu computadora:
 
 ---
 
-## 📁 PASO 1 — Colocar el proyecto
+## PASO 1 — Colocar el proyecto
 
 1. Copia la carpeta `MartinezGonzalezYahirEmanuelUnidad1` a tu escritorio
    (o a donde quieras, por ejemplo: `C:\Proyectos\`)
@@ -31,7 +31,7 @@ Antes de empezar, necesitas tener instalado en tu computadora:
 
 ---
 
-## 🖥️ PASO 2 — Abrir la terminal en VS Code
+## PASO 2 — Abrir la terminal en VS Code
 
 En VS Code presiona: **Ctrl + ` ** (tecla de acento grave, arriba del Tab)
 
@@ -39,7 +39,7 @@ Esto abre la terminal integrada de VS Code.
 
 ---
 
-## 🐍 PASO 3 — Crear el entorno virtual
+## PASO 3 — Crear el entorno virtual
 
 Un entorno virtual es como una "cajita" donde instalamos Django sin afectar
 el resto de tu computadora.
@@ -56,11 +56,11 @@ Luego actívalo:
 venv\Scripts\activate
 ```
 
-✅ Sabrás que está activado cuando aparezca `(venv)` al inicio de la línea.
+ Sabrás que está activado cuando aparezca `(venv)` al inicio de la línea.
 
 ---
 
-## 📦 PASO 4 — Instalar Django
+## PASO 4 — Instalar Django
 
 Con el entorno virtual activo, escribe:
 
@@ -80,7 +80,7 @@ Deberías ver algo como: `5.x.x`
 
 ---
 
-## 🗃️ PASO 5 — Crear las tablas de la base de datos
+## PASO 5 — Crear las tablas de la base de datos
 
 Django necesita crear las tablas en la base de datos SQLite.
 Escribe estos dos comandos:
@@ -97,7 +97,7 @@ Verás varios mensajes con "OK" — eso es normal y bueno.
 
 ---
 
-## 👤 PASO 6 — Crear el superusuario (admin)
+## PASO 6 — Crear el superusuario (admin)
 
 Este usuario te permitirá entrar al panel de administración
 en `/admin/` para agregar productos.
@@ -114,7 +114,7 @@ Te pedirá:
 
 ---
 
-## 🌱 PASO 7 — Cargar productos de ejemplo
+## PASO 7 — Cargar productos de ejemplo
 
 Para que la tienda se vea llena con productos desde el inicio:
 
@@ -126,7 +126,7 @@ Verás mensajes ✅ para cada categoría y producto creado.
 
 ---
 
-## ▶️ PASO 8 — ¡Encender el servidor!
+## PASO 8 — ¡Encender el servidor!
 
 ```
 python manage.py runserver
@@ -141,33 +141,33 @@ Ahora abre tu navegador y entra a: **http://127.0.0.1:8000/**
 
 ---
 
-## 🌐 PÁGINAS DEL SITIO
+## PÁGINAS DEL SITIO
 
 | Página | URL |
 |--------|-----|
-| 🏠 Inicio | http://127.0.0.1:8000/ |
-| 📦 Productos | http://127.0.0.1:8000/productos/ |
-| 🏷️ Ofertas | http://127.0.0.1:8000/ofertas/ |
-| 👤 Registro | http://127.0.0.1:8000/registro/ |
-| 🔑 Login | http://127.0.0.1:8000/login/ |
-| 📬 Buzón | http://127.0.0.1:8000/buzon/ |
-| 💬 Chat | http://127.0.0.1:8000/chat/ |
-| ❓ Ayuda | http://127.0.0.1:8000/ayuda/ |
-| 📞 Contacto | http://127.0.0.1:8000/contacto/ |
-| 🗺️ Mapa del sitio | http://127.0.0.1:8000/mapa-sitio/ |
-| 🔍 Búsqueda | http://127.0.0.1:8000/buscar/ |
-| 🔧 Panel Admin | http://127.0.0.1:8000/admin/ |
-| 🚫 Error 404 | http://127.0.0.1:8000/pagina-inventada/ |
+| Inicio | http://127.0.0.1:8000/ |
+| Productos | http://127.0.0.1:8000/productos/ |
+| Ofertas | http://127.0.0.1:8000/ofertas/ |
+| Registro | http://127.0.0.1:8000/registro/ |
+| Login | http://127.0.0.1:8000/login/ |
+| Buzón | http://127.0.0.1:8000/buzon/ |
+| Chat | http://127.0.0.1:8000/chat/ |
+| Ayuda | http://127.0.0.1:8000/ayuda/ |
+| Contacto | http://127.0.0.1:8000/contacto/ |
+| Mapa del sitio | http://127.0.0.1:8000/mapa-sitio/ |
+| Búsqueda | http://127.0.0.1:8000/buscar/ |
+| Panel Admin | http://127.0.0.1:8000/admin/ |
+| Error 404 | http://127.0.0.1:8000/pagina-inventada/ |
 
 ---
 
-## 🛑 Para detener el servidor
+## Para detener el servidor
 
 En la terminal presiona: **Ctrl + C**
 
 ---
 
-## 🔁 La próxima vez que quieras correrlo
+## La próxima vez que quieras correrlo
 
 Solo necesitas hacer el PASO 3 (activar venv) y PASO 8 (runserver):
 
@@ -178,7 +178,7 @@ python manage.py runserver
 
 ---
 
-## 📸 CAPTURAS QUE NECESITAS PARA EL PDF
+## CAPTURAS QUE NECESITAS PARA EL PDF
 
 Toma capturas de pantalla de estas páginas:
 
@@ -200,23 +200,23 @@ Toma capturas de pantalla de estas páginas:
 
 ---
 
-## 🐛 SOLUCIÓN DE PROBLEMAS
+## SOLUCIÓN DE PROBLEMAS
 
-**❌ "python no se reconoce como comando"**
+**"python no se reconoce como comando"**
 → Reinstala Python marcando "Add Python to PATH"
 
-**❌ "No module named django"**
+**"No module named django"**
 → Asegúrate de tener el entorno virtual activo: `venv\Scripts\activate`
 
-**❌ La página dice "DEBUG=False"**
+**La página dice "DEBUG=False"**
 → Abre `tecnostore_utc/settings.py` y asegúrate que `DEBUG = True`
 
-**❌ Error al hacer makemigrations**
+**Error al hacer makemigrations**
 → Asegúrate de estar en la carpeta correcta (donde está `manage.py`)
 
 ---
 
-## 📤 SUBIR A GITHUB
+##  SUBIR A GITHUB
 
 ```
 git init
